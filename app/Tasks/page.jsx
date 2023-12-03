@@ -144,7 +144,7 @@ export default function Tasks() {
 
   const deleteTask = async (cardId, taskId, card, task) => {
     const cardIndex = cards.findIndex((card) => card._id === cardId);
-
+    console.log({ cardId, taskId, card, task });
     const response = await fetch("/api/tasks", {
       method: "DELETE",
       headers: {
@@ -152,7 +152,7 @@ export default function Tasks() {
       },
       body: JSON.stringify({
         cardId,
-        taskId,
+        taskId: task._id,
       }),
     });
     fetchGroups();
@@ -204,7 +204,7 @@ export default function Tasks() {
       <div>
         <div className="flex mb-4 justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold orange_gradient pb-5">Tasks</h1>
+            <h1 className="text-3xl font-bold orange_gradient py-6">Tasks</h1>
           </div>
 
           <div className="flex items-center pb-5">
@@ -213,7 +213,7 @@ export default function Tasks() {
               value={newCardTitle}
               onChange={(e) => setNewCardTitle(e.target.value)}
               placeholder="Group Name"
-              className="px-4 rounded-full mx-4 w-32 focus:outline-none"
+              className="px-4 rounded-md mx-4 w-32 focus:outline-none"
             />
             <button onClick={addCard}>
               <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">

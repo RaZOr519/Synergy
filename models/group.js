@@ -6,11 +6,9 @@ const taskSchema = new Schema(
     //   _id: { type: Schema.Types.ObjectId, default: new mongoose.Types.ObjectId() },
     groupId: {
       type: String,
-      required: [true, "Please provide a group ID for the task"],
     },
     text: {
       type: String,
-      required: [true, "Please provide task text"],
       trim: true,
     },
     deadline: {
@@ -26,7 +24,7 @@ const groupSchema = new Schema({
     trim: true,
   },
   owners: [],
-  tasks: [],
+  tasks: [taskSchema],
 });
 
 const Group = models.Group || model("Group", groupSchema);

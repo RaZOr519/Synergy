@@ -15,7 +15,7 @@ const TaskCard = ({
   };
 
   return (
-    <div className="bg-orange-100 rounded-md p-4 w-60 hover:shadow-xl hover:bg-amber-100 border-2">
+    <div className="bg-gray-200 rounded-md p-4 w-60 hover:shadow-xl hover:bg-orange-100 border-2">
       <div className="flex justify-between items-center">
         <h2 className="text-lg font-bold mb-2">{card.name}</h2>
         <button onClick={confirmDeleteCard} className="text-gray-500 hover:text-red-500 text-sm">
@@ -43,7 +43,7 @@ const TaskCard = ({
                   <React.Fragment>
                     Past Deadline
                     <br />
-                     {taskdeadline}
+                    {taskdeadline}
                   </React.Fragment>
                 ) : (
                   `Deadline: ${taskdeadline}`

@@ -100,21 +100,6 @@ export default function Tasks() {
         <div>
           <h1 className="text-3xl font-bold orange_gradient pb-5">Groups</h1>
         </div>
-
-        <div className="flex items-center pb-5">
-          <input
-            type="text"
-            value={newCardTitle}
-            onChange={(e) => setNewCardTitle(e.target.value)}
-            placeholder="Group Title"
-            className="px-4 rounded-full mx-4 w-32 focus:outline-none"
-          />
-          <button onClick={addGroupCard}>
-            <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
-              <path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" />
-            </svg>
-          </button>
-        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-8 lg:gap-16">

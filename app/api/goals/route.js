@@ -62,25 +62,6 @@ export async function PUT(request) {
   }
 }
 
-export async function DELETE(request) {
-  const { goalId } = request.params;
-
-  if (!goalId) {
-    return Response.json({ message: "GoalId is missing from the request params" }, { status: 400 });
-  }
-
-  await connectMongoDB();
-
-  try {
-    const deletedGoal = await Goal.findByIdAndDelete(goalId);
-
-    return Response.json({ message: "Goal deleted successfully", deletedGoal });
-  } catch (error) {
-    console.error(error);
-    return Response.json({ message: "Goal deletion failed" }, { status: 500 });
-  }
-}
-
 export async function PUT_COMPLETE(request) {
   const { goalId } = request.params;
   const { completed } = await request.json();

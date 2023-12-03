@@ -16,12 +16,6 @@ export async function POST(request) {
 
     // Check if the current user is an owner of the goal
     const userEmail = request.headers["x-user-email"];
-    if (goal.owner !== userEmail) {
-      return Response.json(
-        { message: "You don't have permission to create a task in this goal" },
-        { status: 403 }
-      );
-    }
 
     // Add the task to the goal's tasks array
     goal.tasks.push({
