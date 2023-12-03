@@ -34,14 +34,13 @@ const GroupCard = ({ groupCard, onDeleteGroup, onAddGroup }) => {
         <div className="flex flex-col items-center flex-grow justify-center">
           <textarea
             value={groupCard.newOwner}
-            onChange={(e) => onCardTitleChange(card._id, e.target.value)}
             placeholder="Add members"
             className="mr-2 px-10 border border-gray-50 rounded-md w-full resize-none"
             rows="1"
             style={{ whiteSpace: "pre-line" }}
           />
           <button
-            onClick={() => onAddGroup(card._id, groupCard.newOwner)}
+            onClick={() => onAddGroup(groupCard._id, groupCard.newOwner)}
             className="m-2 p-5 py-1 bg-slate-300 rounded-md text-sm text-black hover:bg-slate-400"
           >
             Add member

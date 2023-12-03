@@ -68,25 +68,22 @@ export default function Tasks() {
     }
   };
 
-  const onGroupAdd = async (id) => {
+  const onGroupAdd = async (id, owner) => {
     //add owner to group
     const response = await fetch("/api/groups", {
-      method: "POST",
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        title: newGoalTitle,
-        tasks: [],
-        newTask: "",
-        completed: false,
-        owner: currentSessionEmail,
+        owner: owner,
+        groupId: id,
       }),
     });
 
     if (response.ok) {
       const data = await response.json();
-      fetchGoals();
+      fetchGroups();
     } else {
       console.error("Error creating goal:", response.status);
     }

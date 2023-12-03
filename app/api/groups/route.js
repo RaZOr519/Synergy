@@ -29,8 +29,8 @@ export async function PUT(request) {
   try {
     const updatedGroup = await Group.findByIdAndUpdate(
       groupId,
-      { $set: { owner } },
-      { new: false }
+      { $addToSet: { owners: owner } },
+      { new: true }
     );
 
     return Response.json({ message: "Group owners updated successfully", updatedGroup });
