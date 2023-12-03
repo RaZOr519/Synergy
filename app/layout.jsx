@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import "react-toastify/dist/ReactToastify.css";
 
-import Nav from "../app/components/Nav";
+import Nav from "./components/Nav";
 import Provider from "../app/components/Provider";
 
 export const metadata = {
