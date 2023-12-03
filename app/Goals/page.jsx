@@ -12,14 +12,20 @@ export default function Goals() {
     fetchGoals();
   }, []);
 
+  useEffect(() => {
+    console.log("Goal cards:", goalCards);
+  }, [goalCards]);
+
   const fetchGoals = async () => {
     try {
       const response = await fetch("/api/goals");
       if (response.ok) {
         const data = await response.json();
+        console.log("Fetched goals:", data.goals);
         setGoalCards(data.goals);
       } else {
         console.error("Error fetching goals:", response.status);
+        console.error("Response:", await response.text());
       }
     } catch (error) {
       console.error("Error fetching goals:", error);
@@ -56,23 +62,23 @@ export default function Goals() {
     }
   };
 
-  const addTask = async (goalCardId) => {
-    const cardIndex = goalCards.findIndex((card) => card.id === goalCardId);
-    if (goalCards[cardIndex].newTask.trim() !== "") {
-      const updatedGoalCards = [...goalCards];
+  const addTask = (goalCardId) => {
+    const cardIndex = cards.findIndex((card) => card._id === goalCardId);
+    const groupId = cards[cardIndex]._id;
+
+    if (cards[cardIndex].newTask.trim() !== "") {
       const newTask = {
-        id: Date.now(),
-        text: goalCards[cardIndex].newTask,
-        deadline: goalCards[cardIndex].newTaskDeadline,
+        text: cards[cardIndex].newTask,
+        deadline: cards[cardIndex].newTaskDeadline,
+        groupId: groupId,
       };
-      updatedGoalCards[cardIndex].tasks.push(newTask);
-      updatedGoalCards[cardIndex].newTask = "";
-      updatedGoalCards[cardIndex].newTaskDeadline = "";
+      toast.success("Task added!");
+      createTask(groupId, newTask);
 
-      // Update tasks in the database
-      await updateGoalTasks(goalCardId, updatedGoalCards[cardIndex].tasks);
-
-      setGoalCards(updatedGoalCards);
+      const updatedCards = [...cards];
+      updatedCards[cardIndex].newTask = "";
+      updatedCards[cardIndex].newTaskDeadline = "";
+      setCards(updatedCards);
     }
   };
 

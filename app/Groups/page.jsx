@@ -49,7 +49,7 @@ export default function Tasks() {
       setGroupCards([
         ...groupCards,
         {
-          id: Date.now(), // You can keep the id if needed for rendering, but it won't match the API id
+          id: Date.now(),
           title: newCardTitle,
         },
       ]);

@@ -15,7 +15,7 @@ const TaskCard = ({
   };
 
   return (
-    <div className="bg-slate-200 rounded-md p-4 w-60">
+    <div className="bg-orange-100 rounded-md p-4 w-60 hover:shadow-xl hover:bg-amber-100 border-2">
       <div className="flex justify-between items-center">
         <h2 className="text-lg font-bold mb-2">{card.name}</h2>
         <button onClick={confirmDeleteCard} className="text-gray-500 hover:text-red-500 text-sm">
@@ -31,7 +31,7 @@ const TaskCard = ({
         const taskdeadline = new Date(task.deadline).toLocaleDateString(undefined, options);
 
         const taskClassName = `p-2 rounded-xl mb-2 flex justify-between items-center ${
-          isPastDeadline ? "bg-red-200" : "bg-orange-100"
+          isPastDeadline ? "bg-red-200" : "bg-orange-200"
         }`;
 
         return (

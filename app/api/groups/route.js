@@ -22,8 +22,6 @@ export async function POST(request) {
     // Retrieve the user's email from the request headers
     const userEmail = request.headers["x-user-email"];
 
-    // Perform any additional validations if needed
-
     // Create a new group with the user's email
     const group = await Group.create({ name: groupName, owner, createdBy: userEmail });
     return Response.json({ message: "Group created successfully", group });
@@ -41,8 +39,6 @@ export async function DELETE(request) {
   try {
     // Retrieve the user's email from the request headers
     const userEmail = request.headers["x-user-email"];
-
-    // Perform any additional validations if needed
 
     // Delete the group based on user's email and group ID
     const deletedGroup = await Group.findOneAndDelete({ _id: groupId, createdBy: userEmail });

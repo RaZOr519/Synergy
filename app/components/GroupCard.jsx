@@ -2,11 +2,11 @@ import React from "react";
 
 const GroupCard = ({ groupCard, onDeleteGroup, onAddGroup }) => {
   const confirmDeleteGroup = () => {
-    onDeleteGroup(groupCard._id); // Assuming the group ID is stored in _id
+    onDeleteGroup(groupCard._id);
   };
 
   return (
-    <div>
+    <div className="bg-slate-200 rounded-md p-4 w-60 hover:shadow-xl hover:bg-slate-100 border-2">
       <div className="flex justify-between items-center">
         <h2 className="text-lg font-bold mb-2">{groupCard.name}</h2>
         <button onClick={confirmDeleteGroup} className="text-gray-500 hover:text-red-500 text-sm">

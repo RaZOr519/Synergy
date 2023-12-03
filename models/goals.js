@@ -1,4 +1,3 @@
-// models/goal.js
 import mongoose, { Schema, models, model } from "mongoose";
 
 const taskSchema = new Schema({

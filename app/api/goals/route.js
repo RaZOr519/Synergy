@@ -1,4 +1,3 @@
-// app/api/goals.js
 import { connectMongoDB } from "@lib/mongodb";
 import Goal from "@models/goals";
 
@@ -13,37 +12,32 @@ export async function GET(request) {
     return Response.json({ message: "Error fetching goals" }, { status: 500 });
   }
 }
-
 export async function POST(request) {
-  const { goalId } = request.params;
-  const { text } = await request.json();
+  // Ensure title is present in request body
+  const { title, tasks, newTask, newTaskDeadline, completed } = await request.json();
 
-  if (!goalId || !text) {
-    return Response.json(
-      { message: "GoalId or text is missing from the request params" },
-      { status: 400 }
-    );
+  // Check if title is undefined
+  if (!title) {
+    return Response.json({ message: "Title is missing from the request" }, { status: 400 });
   }
 
   await connectMongoDB();
 
   try {
-    const updatedGoal = await Goal.findByIdAndUpdate(
-      goalId,
-      { $push: { tasks: { text } } },
-      { new: true }
-    );
-
-    return Response.json({
-      message: "Checklist item added successfully",
-      updatedGoal,
+    const goal = new Goal({
+      title,
+      tasks: tasks || [],
+      newTask: newTask || "",
+      newTaskDeadline: newTaskDeadline || "",
+      completed: completed || false,
     });
+
+    await goal.save();
+
+    return Response.json({ message: "Goal created successfully", goal });
   } catch (error) {
     console.error(error);
-    return Response.json(
-      { message: "Failed to add checklist item to the database" },
-      { status: 500 }
-    );
+    return Response.json({ message: "Goal creation failed" }, { status: 500 });
   }
 }
 

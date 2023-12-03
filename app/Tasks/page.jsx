@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { toast, ToastContainer } from "react-toastify";
 import TaskCard from "../components/TaskCard";
+import Image from "next/image";
 
 export default function Tasks() {
   const { status, data: session } = useSession();
@@ -40,7 +41,6 @@ export default function Tasks() {
     try {
       // Assuming you have a function to get the current session email
       const currentSessionEmail = session?.user?.email;
-      //console.log(currentSessionEmail);
       const response = await fetch("/api/groups");
 
       if (response.ok) {
@@ -224,7 +224,14 @@ export default function Tasks() {
     <>
       <ToastContainer />
 
-      <div className="container mx-auto mt-8">
+      <div
+        className="container mx-auto mt-8"
+        style={{
+          backgroundImage: 'url("/public/assets/images/10_adasafas.jpg")',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <div className="flex mb-4 justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold orange_gradient pb-5">Tasks</h1>
@@ -247,7 +254,10 @@ export default function Tasks() {
         </div>
 
         {loading ? (
-          <div className="flex flex-col w-full items-center justify-center h-[200px]">Loading</div>
+          <div className="flex flex-col w-full items-center justify-center h-[200px]">
+            {" "}
+            <Image src="/assets/icons/Disk-0.8s-184px.svg" width={100} height={100}></Image>
+          </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4  gap-2 md:gap-8 lg:gap-16">
             {cards.map((card) => (
