@@ -29,7 +29,7 @@ export default function Tasks() {
           group.owners.some((owner) => owner === currentSessionEmail)
         );
 
-        console.log("Filtered Groups:", filteredGroups);
+        //console.log("Filtered Groups:", filteredGroups);
 
         setGroupCards(filteredGroups);
 

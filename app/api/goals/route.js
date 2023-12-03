@@ -13,9 +13,9 @@ export async function GET(request) {
   }
 }
 export async function POST(request) {
-  // Ensure title is present in request bodzxzzxz
+  // Ensure title is present in request body
   const { title, tasks, newTask, newTaskDeadline, owner, completed } = await request.json();
-
+  console.log(title, tasks, newTask, newTaskDeadline, owner, completed);
   // Check if title is undefined
   if (!title) {
     return Response.json({ message: "Title is missing from the request" }, { status: 400 });

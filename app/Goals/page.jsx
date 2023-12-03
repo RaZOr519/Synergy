@@ -24,11 +24,14 @@ export default function Goals() {
 
   const fetchGoals = async () => {
     try {
+      const currentSessionEmail = session?.user?.email;
       const response = await fetch("/api/goals");
+
       if (response.ok) {
         const data = await response.json();
-        console.log("Fetched goals:", data.goals);
-        setGoalCards(data.goals);
+        const filteredGoals = data.goals.filter((goal) => goal.owner === currentSessionEmail);
+        //console.log("Fetched goals:", data.goals);
+        setGoalCards(filteredGoals);
       } else {
         console.error("Error fetching goals:", response.status);
         console.error("Response:", await response.text());
