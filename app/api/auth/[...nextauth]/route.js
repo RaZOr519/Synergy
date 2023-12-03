@@ -15,7 +15,7 @@ const authOptions = {
       if (account.provider === "google") {
         try {
           await connectMongoDB();
-          const userExists = await User.findOne({ email });
+          const userExists = await User.findOne({ email: user.email });
 
           if (!userExists) {
             const res = await fetch("http://localhost:3000/api/users", {
@@ -24,8 +24,8 @@ const authOptions = {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                name,
-                email,
+                name: user.name,
+                email: user.email,
               }),
             });
 

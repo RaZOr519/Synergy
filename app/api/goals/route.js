@@ -14,7 +14,7 @@ export async function GET(request) {
 }
 export async function POST(request) {
   // Ensure title is present in request body
-  const { title, tasks, newTask, newTaskDeadline, completed } = await request.json();
+  const { title, tasks, newTask, newTaskDeadline, owner, completed } = await request.json();
 
   // Check if title is undefined
   if (!title) {
@@ -30,6 +30,7 @@ export async function POST(request) {
       newTask: newTask || "",
       newTaskDeadline: newTaskDeadline || "",
       completed: completed || false,
+      owner: owner,
     });
 
     await goal.save();

@@ -26,11 +26,7 @@ const groupSchema = new Schema({
     trim: true,
   },
   owners: [],
-  createdBy: {
-    type: String,
-    required: [true, "Please provide a group ID for the task"],
-  },
-  tasks: [taskSchema],
+  tasks: [],
 });
 
 const Group = models.Group || model("Group", groupSchema);

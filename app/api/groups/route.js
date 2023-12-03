@@ -43,19 +43,19 @@ export async function PUT(request) {
 }
 
 export async function POST(request) {
-  const { groupName } = await request.json();
+  const { groupName, owners } = await request.json();
 
   await connectMongoDB();
 
   try {
     // Retrieve the user's email from the request headers
     const userEmail = request.headers["x-user-email"];
-
+    console.log(userEmail);
     let exitingOwners = [];
     // Create a new group with the user's email and additional owners
     const group = await Group.create({
       name: groupName,
-      owners: [...exitingOwners, userEmail],
+      owners: owners,
       createdBy: userEmail,
     });
 

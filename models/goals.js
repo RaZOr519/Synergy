@@ -24,10 +24,11 @@ const goalSchema = new Schema({
     default: "",
     trim: true,
   },
-  newTaskDeadline: {
-    type: Date,
-    default: null,
+  owner: {
+    type: String,
+    trim: true,
   },
+
   completed: {
     type: Boolean,
     default: false,
