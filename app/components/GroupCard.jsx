@@ -23,12 +23,15 @@ const GroupCard = ({ groupCard, onDeleteGroup, onAddGroup }) => {
       <div className="mb-4">
         <h3 className="text-sm font-semibold mb-1">Members:</h3>
         <ul>
-          {groupCard.owners ??
-            groupCard.owners.map((owner) => (
-              <li className="text-gray-600">
-                {owner} {/* Display group owner */}
-              </li>
-            ))}
+          {groupCard.owners
+            ? groupCard.owners.map((owner) => {
+                return (
+                  <li key={owner} className="text-gray-600">
+                    <span style={{ fontSize: "smaller" }}> {owner} </span>
+                  </li>
+                );
+              })
+            : {}}
         </ul>
       </div>
 

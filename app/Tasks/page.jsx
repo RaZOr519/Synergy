@@ -64,8 +64,8 @@ export default function Tasks() {
   };
 
   useEffect(() => {
-    fetchGroups();
-  }, []);
+    if (cards.length == 0) fetchGroups();
+  }, [cards]);
 
   const createTask = async (groupId, taskData) => {
     try {
@@ -76,15 +76,7 @@ export default function Tasks() {
         },
         body: JSON.stringify(taskData),
       });
-
-      const res = await fetch("/api/groups");
-      if (res.ok) {
-        const data = await res.json();
-
-        setCards(data.groups);
-      } else {
-        console.error("Error fetching groups:", res.status);
-      }
+      fetchGroups();
     } catch (error) {
       console.error("Error creating task:", error);
     }
@@ -95,10 +87,14 @@ export default function Tasks() {
     const groupId = cards[cardIndex]._id;
 
     if (cards[cardIndex].newTask.trim() !== "") {
+      const currentSessionEmail = session?.user?.email;
+      console.log(currentSessionEmail);
       const newTask = {
         text: cards[cardIndex].newTask,
         deadline: cards[cardIndex].newTaskDeadline,
         groupId: groupId,
+        cardId: groupId,
+        userEmail: currentSessionEmail,
       };
       toast.success("Task added!");
       createTask(groupId, newTask);
@@ -136,17 +132,7 @@ export default function Tasks() {
         toast.success("Group created!");
 
         setLoading(true);
-        try {
-          const response = await fetch("/api/groups");
-          if (response.ok) {
-            const data = await response.json();
-            setCards(data.groups);
-          } else {
-            console.error("Error fetching groups:", response.status);
-          }
-        } catch (error) {
-          console.error("Error fetching groups:", error);
-        }
+        fetchGroups();
         setLoading(false);
       } catch (error) {
         console.error("Error creating a group:", error);
@@ -169,12 +155,7 @@ export default function Tasks() {
         taskId,
       }),
     });
-
-    const updatedCards = [...cards];
-    updatedCards[cardIndex].tasks = updatedCards[cardIndex].tasks.filter(
-      (task) => task._id !== taskId
-    );
-    setCards(updatedCards);
+    fetchGroups();
   };
 
   const handleCardTitleChange = (cardId, newTitle) => {
@@ -195,14 +176,7 @@ export default function Tasks() {
           },
           body: JSON.stringify({ groupId: cardId }),
         });
-
-        if (response.ok) {
-          const updatedCards = cards.filter((card) => card._id !== cardId);
-          setCards(updatedCards);
-        } else {
-          const data = await response.json();
-          console.error("Error deleting group:", data.message);
-        }
+        fetchGroups();
       }
     } catch (error) {
       console.error("Error deleting group:", error);

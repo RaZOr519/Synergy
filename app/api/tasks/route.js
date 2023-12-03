@@ -2,7 +2,8 @@ import { connectMongoDB } from "@lib/mongodb";
 import Group from "@models/group";
 
 export async function POST(request) {
-  const { cardId, text, deadline, groupId } = await request.json();
+  const { cardId, text, deadline, groupId, userEmail } = await request.json();
+  console.log({ cardId, text, deadline, groupId, userEmail });
 
   if (!groupId) {
     return Response.json({ message: "groupId is missing from the request" }, { status: 400 });
@@ -13,9 +14,6 @@ export async function POST(request) {
   try {
     // Find the group by id
     const group = await Group.findById(groupId);
-
-    // Check if the current user is an owner of the group
-    const userEmail = request.headers["x-user-email"];
     if (!group.owners.includes(userEmail)) {
       return Response.json(
         { message: "You don't have permission to create a task in this group" },
