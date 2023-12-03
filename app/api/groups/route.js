@@ -33,6 +33,8 @@ export async function PUT(request) {
       { new: true }
     );
 
+    console.log(owner, groupId, updatedGroup);
+
     return Response.json({ message: "Group owners updated successfully", updatedGroup });
   } catch (error) {
     console.error(error);

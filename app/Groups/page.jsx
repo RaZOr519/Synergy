@@ -69,6 +69,7 @@ export default function Tasks() {
   };
 
   const onGroupAdd = async (id, owner) => {
+    console.log(id, owner);
     //add owner to group
     const response = await fetch("/api/groups", {
       method: "PUT",

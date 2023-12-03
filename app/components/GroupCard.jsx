@@ -1,8 +1,9 @@
 // GroupCard.js
 
-import React from "react";
+import React, { useState } from "react";
 
 const GroupCard = ({ groupCard, onDeleteGroup, onAddGroup }) => {
+  const [newOwner, setNewOwner] = useState("");
   const confirmDeleteGroup = () => {
     onDeleteGroup(groupCard._id);
   };
@@ -33,14 +34,18 @@ const GroupCard = ({ groupCard, onDeleteGroup, onAddGroup }) => {
       <div className="flex mb-4 justify-center">
         <div className="flex flex-col items-center flex-grow justify-center">
           <textarea
-            value={groupCard.newOwner}
+            value={newOwner}
+            onChange={(e) => setNewOwner(e.target.value)}
             placeholder="Add members"
             className="mr-2 px-10 border border-gray-50 rounded-md w-full resize-none"
             rows="1"
             style={{ whiteSpace: "pre-line" }}
           />
           <button
-            onClick={() => onAddGroup(groupCard._id, groupCard.newOwner)}
+            onClick={() => {
+              onAddGroup(groupCard._id, newOwner);
+              setNewOwner("");
+            }}
             className="m-2 p-5 py-1 bg-slate-300 rounded-md text-sm text-black hover:bg-slate-400"
           >
             Add member
