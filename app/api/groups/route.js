@@ -12,8 +12,36 @@ export async function GET(request) {
     return Response.json({ message: "Groups fetching failed" }, { status: 500 });
   }
 }
+
+//write function to update owners list
+export async function PUT(request) {
+  const { owner, groupId } = await request.json();
+
+  if (!groupId) {
+    return Response.json(
+      { message: "groupId is missing from the request params" },
+      { status: 400 }
+    );
+  }
+
+  await connectMongoDB();
+
+  try {
+    const updatedGroup = await Group.findByIdAndUpdate(
+      groupId,
+      { $set: { owner } },
+      { new: false }
+    );
+
+    return Response.json({ message: "Group owners updated successfully", updatedGroup });
+  } catch (error) {
+    console.error(error);
+    return Response.json({ message: "Group owners update failed" }, { status: 500 });
+  }
+}
+
 export async function POST(request) {
-  const { groupName, owners = [] } = await request.json();
+  const { groupName } = await request.json();
 
   await connectMongoDB();
 
@@ -21,10 +49,11 @@ export async function POST(request) {
     // Retrieve the user's email from the request headers
     const userEmail = request.headers["x-user-email"];
 
+    let exitingOwners = [];
     // Create a new group with the user's email and additional owners
     const group = await Group.create({
       name: groupName,
-      owners: [userEmail, ...owners],
+      owners: [...exitingOwners, userEmail],
       createdBy: userEmail,
     });
 

@@ -18,13 +18,16 @@ export default function Tasks() {
 
   const fetchGroups = async () => {
     try {
+      const currentSessionEmail = session?.user?.email;
       const response = await fetch("/api/groups");
 
       if (response.ok) {
         const data = await response.json();
 
         // Filter groups based on the user's email
-        const filteredGroups = data.groups.filter((group) => group.owner === user);
+        const filteredGroups = data.groups.filter((group) =>
+          group.owners.some((owner) => owner === currentSessionEmail)
+        );
 
         console.log("Filtered Groups:", filteredGroups);
 
@@ -65,6 +68,30 @@ export default function Tasks() {
     }
   };
 
+  const onGroupAdd = async (id) => {
+    //add owner to group
+    const response = await fetch("/api/groups", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title: newGoalTitle,
+        tasks: [],
+        newTask: "",
+        completed: false,
+        owner: currentSessionEmail,
+      }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      fetchGoals();
+    } else {
+      console.error("Error creating goal:", response.status);
+    }
+  };
+
   useEffect(() => {
     fetchGroups();
   }, [user]);
@@ -94,7 +121,12 @@ export default function Tasks() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-2 md:gap-8 lg:gap-16">
         {groupCards.map((groupCard) => (
-          <GroupCard key={groupCard._id} groupCard={groupCard} onDeleteGroup={deleteGroupCard} />
+          <GroupCard
+            key={groupCard._id}
+            groupCard={groupCard}
+            onAddGroup={onGroupAdd}
+            onDeleteGroup={deleteGroupCard}
+          />
         ))}
       </div>
     </div>

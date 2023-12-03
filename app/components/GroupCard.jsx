@@ -22,16 +22,18 @@ const GroupCard = ({ groupCard, onDeleteGroup, onAddGroup }) => {
       <div className="mb-4">
         <h3 className="text-sm font-semibold mb-1">Members:</h3>
         <ul>
-          <li className="text-gray-600">
-            {groupCard.owner} {/* Display group owner */}
-          </li>
+          {groupCard.owners.map((owner) => (
+            <li className="text-gray-600">
+              {owner} {/* Display group owner */}
+            </li>
+          ))}
         </ul>
       </div>
 
       <div className="flex mb-4 justify-center">
         <div className="flex flex-col items-center flex-grow justify-center">
           <textarea
-            value={groupCard.newTask}
+            value={groupCard.newOwner}
             onChange={(e) => onCardTitleChange(card._id, e.target.value)}
             placeholder="Add members"
             className="mr-2 px-10 border border-gray-50 rounded-md w-full resize-none"
@@ -39,7 +41,7 @@ const GroupCard = ({ groupCard, onDeleteGroup, onAddGroup }) => {
             style={{ whiteSpace: "pre-line" }}
           />
           <button
-            onClick={() => onAddTask(card._id)}
+            onClick={() => onAddGroup(card._id, groupCard.newOwner)}
             className="m-2 p-5 py-1 bg-slate-300 rounded-md text-sm text-black hover:bg-slate-400"
           >
             Add member
