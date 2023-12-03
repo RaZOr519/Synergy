@@ -1,40 +1,39 @@
 import { connectMongoDB } from "@lib/mongodb";
-import Group from "@models/group";
+import Goal from "@models/goals";
 
 export async function POST(request) {
-  const { cardId, text, deadline, groupId } = await request.json();
+  const { text, goalId } = await request.json();
 
-  if (!groupId) {
-    return Response.json({ message: "groupId is missing from the request" }, { status: 400 });
+  if (!goalId) {
+    return Response.json({ message: "goalId is missing from the request" }, { status: 400 });
   }
 
   await connectMongoDB();
 
   try {
-    // Find the group by id
-    const group = await Group.findById(groupId);
+    // Find the goal by id
+    const goal = await Goal.findById(goalId);
 
-    // Check if the current user is an owner of the group
+    // Check if the current user is an owner of the goal
     const userEmail = request.headers["x-user-email"];
-    if (!group.owners.includes(userEmail)) {
+    if (goal.owner !== userEmail) {
       return Response.json(
-        { message: "You don't have permission to create a task in this group" },
+        { message: "You don't have permission to create a task in this goal" },
         { status: 403 }
       );
     }
 
-    // Add the task to the group's tasks array
-    group.tasks.push({
-      cardId: cardId,
+    // Add the task to the goal's tasks array
+    goal.tasks.push({
+      goalId: goalId,
       text: text,
-      deadline: deadline,
     });
 
-    await group.save();
+    await goal.save();
 
     return Response.json({
       message: "Task created successfully",
-      task: group.tasks[group.tasks.length - 1],
+      task: goal.tasks[goal.tasks.length - 1],
     });
   } catch (error) {
     console.error(error);
@@ -49,7 +48,7 @@ export async function DELETE(request) {
 
   try {
     // Find the card and remove the task from its tasks array
-    const updatedCard = await Group.findOneAndUpdate(
+    const updatedCard = await Goal.findOneAndUpdate(
       { _id: cardId },
       { $pull: { tasks: { _id: taskId } } },
       { new: true }

@@ -3,7 +3,7 @@ import Task from "./task";
 
 const taskSchema = new Schema(
   {
- //   _id: { type: Schema.Types.ObjectId, default: new mongoose.Types.ObjectId() },
+    //   _id: { type: Schema.Types.ObjectId, default: new mongoose.Types.ObjectId() },
     groupId: {
       type: String,
       required: [true, "Please provide a group ID for the task"],
@@ -16,8 +16,8 @@ const taskSchema = new Schema(
     deadline: {
       type: Date,
     },
-  },
- // { _id: true }
+  }
+  // { _id: true }
 );
 const groupSchema = new Schema({
   name: {
@@ -25,9 +25,10 @@ const groupSchema = new Schema({
     required: [true, "Please enter group name"],
     trim: true,
   },
-  owner: {
+  owners: [],
+  createdBy: {
     type: String,
-    required: [true, "Please enter group owner"],
+    required: [true, "Please provide a group ID for the task"],
   },
   tasks: [taskSchema],
 });

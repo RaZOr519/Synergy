@@ -1,3 +1,5 @@
+// GroupCard.js
+
 import React from "react";
 
 const GroupCard = ({ groupCard, onDeleteGroup, onAddGroup }) => {
@@ -16,9 +18,32 @@ const GroupCard = ({ groupCard, onDeleteGroup, onAddGroup }) => {
         </button>
       </div>
 
+      {/* Display group members */}
+      <div className="mb-4">
+        <h3 className="text-sm font-semibold mb-1">Members:</h3>
+        <ul>
+          <li className="text-gray-600">
+            {groupCard.owner} {/* Display group owner */}
+          </li>
+        </ul>
+      </div>
+
       <div className="flex mb-4 justify-center">
         <div className="flex flex-col items-center flex-grow justify-center">
-          <button onClick={() => onAddGroup()}>see more</button>
+          <textarea
+            value={groupCard.newTask}
+            onChange={(e) => onCardTitleChange(card._id, e.target.value)}
+            placeholder="Add members"
+            className="mr-2 px-10 border border-gray-50 rounded-md w-full resize-none"
+            rows="1"
+            style={{ whiteSpace: "pre-line" }}
+          />
+          <button
+            onClick={() => onAddTask(card._id)}
+            className="m-2 p-5 py-1 bg-slate-300 rounded-md text-sm text-black hover:bg-slate-400"
+          >
+            Add member
+          </button>
         </div>
       </div>
     </div>

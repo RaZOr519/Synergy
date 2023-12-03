@@ -8,11 +8,12 @@ import TaskCard from "../components/TaskCard";
 import Image from "next/image";
 
 export default function Tasks() {
-  const { status, data: session } = useSession();
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newCardTitle, setNewCardTitle] = useState("");
   const [user, setUser] = useState();
+
+  const { status, data: session } = useSession();
   useEffect(() => {
     if (status === "authenticated") {
       setUser(session?.user?.email);
@@ -47,7 +48,9 @@ export default function Tasks() {
         const data = await response.json();
 
         // Filter groups based on the current session email
-        const filteredGroups = data.groups.filter((group) => group.owner === currentSessionEmail);
+        const filteredGroups = data.groups.filter((group) =>
+          group.owners.some((owner) => owner === currentSessionEmail)
+        );
 
         setCards(filteredGroups);
       } else {
@@ -125,7 +128,7 @@ export default function Tasks() {
           },
           body: JSON.stringify({
             groupName: newCardTitle,
-            owner: user,
+            owners: [user],
             tasks: [],
           }),
         });

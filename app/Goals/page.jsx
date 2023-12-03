@@ -1,16 +1,22 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import "tailwindcss/tailwind.css";
+import { toast, ToastContainer } from "react-toastify";
 import GoalCard from "../components/GoalCard";
+import { useSession } from "next-auth/react";
 
 export default function Goals() {
   const [goalCards, setGoalCards] = useState([]);
   const [newGoalTitle, setNewGoalTitle] = useState("");
+  const { status, data: session } = useSession();
+  const [user, setUser] = useState();
 
   useEffect(() => {
-    // Fetch goals from the database when the component mounts
+    if (status === "authenticated") {
+      setUser(session?.user?.email);
+    }
     fetchGoals();
-  }, []);
+  }, [status, session]);
 
   useEffect(() => {
     console.log("Goal cards:", goalCards);
@@ -35,6 +41,7 @@ export default function Goals() {
   const addGoal = async () => {
     if (newGoalTitle.trim() !== "") {
       try {
+        const currentSessionEmail = session?.user?.email;
         const response = await fetch("/api/goals", {
           method: "POST",
           headers: {
@@ -44,44 +51,64 @@ export default function Goals() {
             title: newGoalTitle,
             tasks: [],
             newTask: "",
-            newTaskDeadline: "",
             completed: false,
+            owner: currentSessionEmail,
           }),
         });
 
         if (response.ok) {
-          // Fetch goals again after adding a new goal
+          const data = await response.json();
           fetchGoals();
-          setNewGoalTitle("");
         } else {
-          console.error("Error adding goal:", response.status);
+          console.error("Error creating goal:", response.status);
         }
       } catch (error) {
-        console.error("Error adding goal:", error);
+        console.error("Error creating a goal:", error);
       }
+    } else {
+      console.error("Please enter a valid goal title!");
     }
   };
 
-  const addTask = (goalCardId) => {
-    const cardIndex = cards.findIndex((card) => card._id === goalCardId);
-    const groupId = cards[cardIndex]._id;
+  const addTask = (goalCardId, text) => {
+    const cardIndex = goalCards.findIndex((card) => card._id === goalCardId);
+    console.log("goalCardId:", cardIndex);
+    const goalId = goalCards[cardIndex]._id;
+    const newTask = {
+      text: text,
+      goalId: goalCardId,
+    };
+    toast.success("Task added!");
+    createTask(goalCardId, newTask);
 
-    if (cards[cardIndex].newTask.trim() !== "") {
-      const newTask = {
-        text: cards[cardIndex].newTask,
-        deadline: cards[cardIndex].newTaskDeadline,
-        groupId: groupId,
-      };
-      toast.success("Task added!");
-      createTask(groupId, newTask);
-
-      const updatedCards = [...cards];
-      updatedCards[cardIndex].newTask = "";
-      updatedCards[cardIndex].newTaskDeadline = "";
-      setCards(updatedCards);
-    }
+    const updatedCards = [...goalCards];
+    updatedCards[cardIndex].newTask = "";
+    updatedCards[cardIndex].newTaskDeadline = "";
+    setGoalCards(updatedCards);
   };
 
+  const createTask = async (goalId, taskData) => {
+    try {
+      const response = await fetch(`/api/goaltask`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(taskData),
+      });
+
+      const res = await fetch("/api/goals");
+      if (res.ok) {
+        const data = await res.json();
+
+        setGoalCards(data.goals);
+      } else {
+        console.error("Error fetching groups:", res.status);
+      }
+    } catch (error) {
+      console.error("Error creating task:", error);
+    }
+  };
   const updateGoalTasks = async (goalCardId, tasks) => {
     try {
       await fetch(`/api/goals/${goalCardId}/tasks`, {
@@ -205,15 +232,15 @@ export default function Goals() {
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4  gap-2 md:gap-8 lg:gap-16">
         {goalCards.map((goalCard) => (
           <GoalCard
-            key={goalCard.id}
+            key={goalCard._id}
             goalCard={goalCard}
             onAddTask={addTask}
             onEditTask={editTask}
             onDeleteTask={deleteTask}
             onGoalTitleChange={handleGoalTitleChange}
-            onDeleteGoal={() => deleteGoal(goalCard.id)}
+            onDeleteGoal={() => deleteGoal(goalCard._id)}
             onSetDeadline={handleSetDeadline}
-            onToggleCompletion={() => toggleCompletion(goalCard.id)}
+            onToggleCompletion={() => toggleCompletion(goalCard._id)}
           />
         ))}
       </div>

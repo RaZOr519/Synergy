@@ -12,9 +12,8 @@ export async function GET(request) {
     return Response.json({ message: "Groups fetching failed" }, { status: 500 });
   }
 }
-
 export async function POST(request) {
-  const { groupName, owner } = await request.json();
+  const { groupName, owners = [] } = await request.json();
 
   await connectMongoDB();
 
@@ -22,8 +21,13 @@ export async function POST(request) {
     // Retrieve the user's email from the request headers
     const userEmail = request.headers["x-user-email"];
 
-    // Create a new group with the user's email
-    const group = await Group.create({ name: groupName, owner, createdBy: userEmail });
+    // Create a new group with the user's email and additional owners
+    const group = await Group.create({
+      name: groupName,
+      owners: [userEmail, ...owners],
+      createdBy: userEmail,
+    });
+
     return Response.json({ message: "Group created successfully", group });
   } catch (error) {
     console.error(error);

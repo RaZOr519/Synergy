@@ -1,17 +1,14 @@
 import mongoose, { Schema, models, model } from "mongoose";
 
 const taskSchema = new Schema({
-  groupId: {
+  goalId: {
     type: String,
-    required: [true, "Please provide a group ID for the task"],
+    required: [true, "Please provide a goal ID for the task"],
   },
   text: {
     type: String,
     required: [true, "Please provide task text"],
     trim: true,
-  },
-  deadline: {
-    type: Date,
   },
 });
 
