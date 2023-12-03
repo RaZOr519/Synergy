@@ -13,6 +13,7 @@ export default function Tasks() {
   const [newCardTitle, setNewCardTitle] = useState("");
   const [user, setUser] = useState();
 
+
   const { status, data: session } = useSession();
   useEffect(() => {
     if (status === "authenticated") {
@@ -106,12 +107,35 @@ export default function Tasks() {
     }
   };
 
-  const editTask = (cardId, taskId, task, newText) => {
-    const cardIndex = cards.findIndex((card) => card._id === cardId);
-    const taskIndex = cards[cardIndex].tasks.findIndex((task) => task.id === taskId);
-    const updatedCards = [...cards];
-    updatedCards[cardIndex].tasks[taskIndex].text = newText;
-    setCards(updatedCards);
+  const editTask = async (cardId, taskId, task, newText) => {
+    // Check if the deadline is passed
+    const isPastDeadline =
+      new Date(updatedCards[cardIndex].tasks[taskIndex].deadline) < new Date();
+  
+    if (isPastDeadline) {
+      try {
+        // Use the Next.js API route to send an email
+        const response = await fetch("/api/sendEmail", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            to: session?.user?.email,
+            subject: "Task Deadline Passed",
+            text: `The deadline for the task "${newText}" has passed.`,
+          }),
+        });
+  
+        if (response.ok) {
+          console.log("Email sent successfully");
+        } else {
+          console.error("Failed to send email");
+        }
+      } catch (error) {
+        console.error("Error sending email:", error);
+      }
+    }
   };
 
   const addCard = async () => {
