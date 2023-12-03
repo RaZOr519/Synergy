@@ -201,14 +201,7 @@ export default function Tasks() {
     <>
       <ToastContainer />
 
-      <div
-        className="container mx-auto mt-8"
-        style={{
-          backgroundImage: 'url("/public/assets/images/10_adasafas.jpg")',
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
+      <div>
         <div className="flex mb-4 justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold orange_gradient pb-5">Tasks</h1>
@@ -236,7 +229,7 @@ export default function Tasks() {
             <Image src="/assets/icons/Disk-0.8s-184px.svg" width={100} height={100}></Image>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4  gap-2 md:gap-8 lg:gap-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4  gap-2 md:gap-8 lg:gap-8">
             {cards.map((card) => (
               <div key={card._id}>
                 <TaskCard
