@@ -41,6 +41,7 @@ export default function Goals() {
   const addGoal = async () => {
     if (newGoalTitle.trim() !== "") {
       try {
+        toast.success("New Goal Created");
         const currentSessionEmail = session?.user?.email;
         const response = await fetch("/api/goals", {
           method: "POST",
@@ -57,7 +58,7 @@ export default function Goals() {
         });
 
         if (response.ok) {
-          fetchGoaals();
+          fetchGoals();
         } else {
           console.error("Error creating goal:", response.status);
         }
@@ -77,7 +78,6 @@ export default function Goals() {
       text: text,
       goalId: goalCardId,
     };
-    toast.success("Task added!");
 
     createTask(goalCardId, newTask);
 
@@ -98,6 +98,7 @@ export default function Goals() {
         body: JSON.stringify(taskData),
       });
       fetchGoals();
+      toast.success("Checklist added!");
     } catch (error) {
       console.error("Error creating task:", error);
     }
@@ -130,6 +131,7 @@ export default function Goals() {
 
   const deleteTask = async (goalCardId, task) => {
     console.log({ goalCardId, task });
+    toast.success("Checkpoint Completed!");
     const response = await fetch("/api/goaltask", {
       method: "DELETE",
       headers: {
@@ -154,6 +156,7 @@ export default function Goals() {
     const shouldDelete = window.confirm("Are you sure you want to delete this goal?");
     if (shouldDelete) {
       try {
+        toast.error("Goal Removed");
         const response = await fetch(`/api/goals/${goalCardId}`, {
           method: "DELETE",
         });
@@ -214,7 +217,7 @@ export default function Goals() {
             value={newGoalTitle}
             onChange={(e) => setNewGoalTitle(e.target.value)}
             placeholder="Goal Title"
-            className="px-4 rounded-md mx-4 w-32 focus:outline-none"
+            className="px-4 rounded-md mx-4 w-32 focus:outline-none bg-white pb-1"
           />
           <button onClick={addGoal}>
             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">
@@ -223,7 +226,7 @@ export default function Goals() {
           </button>
         </div>
       </div>
-
+<ToastContainer/>
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4  gap-2 md:gap-8 lg:gap-16">
         {goalCards.map((goalCard) => (
           <GoalCard

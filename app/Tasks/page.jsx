@@ -213,7 +213,7 @@ export default function Tasks() {
               value={newCardTitle}
               onChange={(e) => setNewCardTitle(e.target.value)}
               placeholder="Group Name"
-              className="px-4 rounded-md mx-4 w-32 focus:outline-none"
+              className="px-4 rounded-md mx-4 w-32 focus:outline-none bg-white pb-1"
             />
             <button onClick={addCard}>
               <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512">

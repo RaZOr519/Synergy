@@ -31,7 +31,7 @@ const TaskCard = ({
         const taskdeadline = new Date(task.deadline).toLocaleDateString(undefined, options);
 
         const taskClassName = `p-2 rounded-xl mb-2 flex justify-between items-center ${
-          isPastDeadline ? "bg-red-200" : "bg-orange-200"
+          isPastDeadline ? "bg-red-200" : "bg-slate-300"
         }`;
 
         return (
@@ -75,7 +75,7 @@ const TaskCard = ({
             value={card.newTask}
             onChange={(e) => onCardTitleChange(card._id, e.target.value)}
             placeholder="Task Name"
-            className="mr-2 px-2 border border-gray-300 rounded-md w-full resize-none "
+            className="mr-2 px-2 border border-slate-100 rounded-md w-full resize-none "
             rows="2"
             style={{ whiteSpace: "pre-line" }}
           />
@@ -84,7 +84,7 @@ const TaskCard = ({
             type="date"
             value={card.newTaskDeadline}
             onChange={(e) => onSetDeadline(card._id, e.target.value)}
-            className="mr-2 px-2 border border-gray-400 rounded-full w-full text-sm"
+            className="mr-2 px-2 rounded-full w-full text-sm"
           />
           <button
             onClick={() => onAddTask(card._id)}
